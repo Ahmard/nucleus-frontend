@@ -1,0 +1,14 @@
+@import "variables.css";
+
+.el-input__wrapper.is-focus {
+  /*border-color: var(--bs-primary-border-color)!important;*/
+}
+
+.el-button-primary {
+  /*background-color: var(--bs-primary) !important;*/
+  /*border-color: var(--bs-primary) !important;*/
+}
+
+.el-button-primary:hover {
+  /*background-color: var(--bs-primary-border-color) !important;*/
+}

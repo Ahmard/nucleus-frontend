@@ -1,0 +1,25 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@element-plus/nuxt": "^1.0.4",
+    "@types/node": "^18",
+    "nuxt": "^3.5.1",
+    "sass": "^1.62.1"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "@nuxt-alt/auth": "^2.5.0",
+    "@nuxt-alt/http": "^1.6.4",
+    "@pinia/nuxt": "^0.4.10",
+    "element-plus": "^2.3.4",
+    "pinia": "^2.0.36"
+  }
+}
