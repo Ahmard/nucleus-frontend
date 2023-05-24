@@ -9,7 +9,7 @@
         <Header @toggle_sidebar="toggleSidebar"/>
       </el-header>
 
-      <el-main>
+      <el-main style="overflow: hidden">
         <nuxt-page></nuxt-page>
       </el-main>
     </el-container>
