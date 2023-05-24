@@ -1,7 +1,6 @@
 import {useApiUrl} from "~/composables/url";
 
 export function axiosHandleError(error: any) {
-  console.error(error)
   let message = 'Something went wrong, please try again';
 
   if (error.response && error.response._data) {
