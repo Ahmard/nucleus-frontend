@@ -14,13 +14,13 @@
     </div>
     <!--    <el-menu-item index="1">Nucleus Family</el-menu-item>-->
     <div class="flex-grow-1"/>
-    <el-menu-item index="2">
+    <el-menu-item index="2" :class="{'d-none': isMobileView}">
       <el-icon>
         <el-icon-list/>
       </el-icon>
       Todo
     </el-menu-item>
-    <el-menu-item index="3">
+    <el-menu-item index="3" :class="{'d-none': isMobileView}">
       <el-icon>
         <el-icon-calendar/>
       </el-icon>
@@ -66,16 +66,37 @@ import {useRouter} from "#app/composables/router";
 let activeIndex = ref("");
 const emit = defineEmits(['toggle_sidebar'])
 
-let isCollapsed = ref(false)
-isCollapsed.value = localStorage.getItem('is_sidebar_collapsed') === 'yes'
+let canOverrideSidebarToggleState = false
+let isMobileView = ref(window.innerWidth <= 768)
+let isCollapsed = ref(localStorage.getItem('is_sidebar_collapsed') === 'yes')
+
 emit('toggle_sidebar', isCollapsed.value)
+
+function toggleSidebarResponsively() {
+  let isMobile = window.innerWidth <= 768
+
+  if (isMobile) {
+    isMobileView.value = true
+    doToggleSidebar(true)
+    canOverrideSidebarToggleState = true
+  }
+
+  if (!isMobile && canOverrideSidebarToggleState) {
+    isMobileView.value = false
+    doToggleSidebar(false)
+  }
+}
 
 function handleSelect() {
 
 }
 
 function toggleSidebar() {
-  isCollapsed.value = !isCollapsed.value;
+  doToggleSidebar()
+}
+
+function doToggleSidebar(state: boolean | null = null) {
+  isCollapsed.value = state !== null ? state : !isCollapsed.value;
   localStorage.setItem('is_sidebar_collapsed', isCollapsed.value ? 'yes' : 'no')
   emit('toggle_sidebar', isCollapsed.value)
 }
@@ -86,6 +107,11 @@ async function logout() {
   await useRouter().push('/login')
 }
 
+if (isMobileView.value) {
+  toggleSidebarResponsively()
+}
+
+window.addEventListener('resize', toggleSidebarResponsively);
 </script>
 
 <style>

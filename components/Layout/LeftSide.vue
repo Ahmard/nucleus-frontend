@@ -49,9 +49,6 @@ const props = defineProps({
   isCollapsed: Boolean
 })
 
-// let isCollapsed  = false;
-
-
 function handleOpen() {
 
 }

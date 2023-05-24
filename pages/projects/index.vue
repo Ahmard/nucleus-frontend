@@ -3,16 +3,20 @@
     <div class="col-md-7">
       <el-card class="box-card">
         <template #header>
-          <div class="card-header">
-            <span>Card name</span>
-            <el-button class="button" text>Operation button</el-button>
+          <div class="card-header d-flex justify-content-between">
+            <span class="text-uppercase pt-2">Projects</span>
+            <el-button
+              class="button"
+              type="primary"
+              :icon="ElIconPlus">
+              Create Project
+            </el-button>
           </div>
         </template>
         <div class="text item">
-          <div style="height: calc(100vh - 300px); width: 100%">
+          <div style="min-height: calc(100vh - 300px); width: inherit">
             <el-auto-resizer>
               <template #default="{ height, width }">
-                {{ width }}
                 <el-table-v2
                   :columns="columns"
                   :data="users"
