@@ -27,13 +27,13 @@
       </el-icon>
       <span>Projects</span>
     </el-menu-item>
-    <el-menu-item index="2" @click="rr('/expenses')">
+    <el-menu-item index="3" @click="rr('/expenses')">
       <el-icon>
         <el-icon-wallet/>
       </el-icon>
       <span>Expenses</span>
     </el-menu-item>
-    <el-menu-item index="2" @click="rr('/todos')">
+    <el-menu-item index="4" @click="rr('/todos')">
       <el-icon>
         <el-icon-list/>
       </el-icon>

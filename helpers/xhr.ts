@@ -1,4 +1,5 @@
-import {useApiUrl} from "~/composables/url";
+import {XhrResponseData} from "~/types/xhr";
+import {LooseObject} from "~/types/loose.object";
 
 export function axiosHandleError(error: any) {
   let message = 'Something went wrong, please try again';
@@ -31,9 +32,34 @@ export function axiosHandleError(error: any) {
   throw error
 }
 
-export async function xhrPost(uri: string, data: any) {
-  return $fetch(
-    useApiUrl('auth/register'),
-    {method: 'POST', body: data}
-  ).catch(axiosHandleError);
+export async function xhrPost(uri: string, data: any, headers: LooseObject = {}): Promise<XhrResponseData> {
+  headers = Object.assign(headers, makeAuthorizationHeader());
+  // @ts-ignore
+  return $fetch(uri, {method: 'POST', body: data, headers})
+    .catch(axiosHandleError);
+}
+
+export async function xhrPut(uri: string, data: any, headers: LooseObject = {}): Promise<XhrResponseData> {
+  headers = Object.assign(headers, makeAuthorizationHeader());
+  // @ts-ignore
+  return $fetch(uri, {method: 'PUT', body: data, headers})
+    .catch(axiosHandleError);
+}
+
+export async function xhrGet(uri: string, params: LooseObject = {}): Promise<XhrResponseData> {
+  const headers = makeAuthorizationHeader();
+  // @ts-ignore
+  return $fetch(uri, {params, headers})
+    .catch(axiosHandleError);
+}
+
+export async function xhrDelete(uri: string, params: LooseObject = {}): Promise<XhrResponseData> {
+  const headers = makeAuthorizationHeader();
+  // @ts-ignore
+  return $fetch(uri, {method:'DELETE', params, headers})
+    .catch(axiosHandleError);
+}
+
+function makeAuthorizationHeader() {
+  return {Authorization: useAuth().tokenStrategy.token?.get()}
 }
