@@ -1,9 +1,12 @@
 <template>
   <div>
-    <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column label="Name" prop="name"/>
-      <el-table-column label="Description" prop="description"/>
-      <el-table-column label="Created At" prop="created_at"/>
+    <el-table
+      border
+      :data="tableData"
+      style="width: 100%"
+      highlight-current-row
+      @row-click="handleRowClick">
+      <slot />
       <el-table-column align="right">
         <template #header>
           <el-input v-model="search" size="small" placeholder="Type to search"/>
