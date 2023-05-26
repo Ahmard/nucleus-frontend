@@ -7,7 +7,6 @@
       :close-on-press-escape="false"
       :close-on-click-modal="false">
     <span>
-      {{ form }}
       <el-form :model="form" label-position="top" :rules="rules" ref="form_ref">
         <el-form-item label="Spending Amount" prop="amount" required>
           <el-input
