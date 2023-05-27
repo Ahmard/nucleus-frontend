@@ -2,7 +2,7 @@
   <el-menu
     default-active="1"
     class="el-menu-vertical-demo pt-2"
-    :class="{'collapsed': props.isCollapsed}"
+    :class="{ 'collapsed': props.isCollapsed }"
     :collapse="isCollapsed"
     @open="handleOpen"
     @close="handleClose"
@@ -10,7 +10,7 @@
     <div class="px-3">
       <img
         class="log top-logo"
-        :class="{'collapsed': props.isCollapsed}"
+        :class="{ 'collapsed': props.isCollapsed }"
         src="/nucleus-logo-80x50.png"
         alt=""
       />

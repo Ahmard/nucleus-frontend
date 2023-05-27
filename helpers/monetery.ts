@@ -3,6 +3,7 @@ export function to_cent(number: number) {
 }
 
 export function from_cent(number: number) {
+  if (isNaN(number)) return 0;
   return number / 100
 }
 

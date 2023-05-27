@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-md-10 col-sm-10 col-lg-7 col-xl-7">
         <div class="mt-3 mb-4">
@@ -10,7 +10,7 @@
           </el-breadcrumb>
         </div>
 
-        <el-card class="box-card" shadow="never">
+        <el-card class="shadow-sm" shadow="never">
           <template #header>
             <div class="card-header d-flex justify-content-between">
               <span class="text-uppercase">Project Information</span>
