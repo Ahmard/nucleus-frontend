@@ -1,3 +1,5 @@
+import {to_cent} from "~/helpers/monetery";
+
 export function date_shortcut() {
   return [
     {
@@ -34,8 +36,9 @@ export function formatNumber(number: string): string {
   return formatted
 }
 
-export function removeCommas(strNumber: string): Number {
-  return parseInt(strNumber.replaceAll(',', ''))
+export function removeCommas(strNumber: string, format_to_cent: boolean = false): Number {
+  const num = parseInt(strNumber.replaceAll(',', ''))
+  return format_to_cent ? to_cent(num) : num
 }
 
 export function formatInputValue(number: string): string {

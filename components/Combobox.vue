@@ -17,9 +17,9 @@
       :clearable="clearable"
       :value-key="valueKey"
       :multiple="multiple"
-      :remote="true"
-      :filter-method="filter"
-      :remote-method="searchRemoteData"
+      :remote="is_remote"
+      :filter-method="endpoint ? filter : undefined"
+      :remote-method="endpoint ? searchRemoteData : null"
       :loading="loading"
       :name="name"
       :disabled="disabled"
@@ -44,6 +44,7 @@ export default {
     name: {default: 'combobox'},
     label: {default: 'Choose'},
     rules: {default: () => []},
+    items: {default: () => []},
     selectStyle: {default: null},
     selectClass: {default: null},
     value: {default: null},
@@ -64,15 +65,26 @@ export default {
       this.$emit('change', val)
     },
     value(val) {
-      if (val) {
+      console.log(val)
+      if (this.endpoint && val) {
         this.triggerRemoteSearch(val)
       }
+
+      if (!this.endpoint) {
+        this.theValue = val
+      }
     },
+    items(val) {
+      if (!this.endpoint && this.items) {
+        this.results = val
+      }
+    }
   },
   data() {
     return {
       theValue: null,
       loading: true,
+      is_remote: true,
       results: [],
     }
   },
@@ -80,7 +92,7 @@ export default {
     onFocus(e) {
       this.$emit('focus', e)
 
-      if (!this.results.length) {
+      if (this.endpoint && !this.results.length) {
         this.searchRemoteData('')
       }
     },
@@ -103,12 +115,14 @@ export default {
       return label.slice(0, separatorLength - (separatorLength * 2))
     },
     searchRemoteData(q) {
-      this.loading = true
-      return xhrGet(this.endpoint, {search: q})
-        .then(resp => {
-          this.results = resp.data
-        })
-        .finally(() => this.loading = false)
+      if (this.is_remote) {
+        this.loading = true
+        return xhrGet(this.endpoint, {search: q})
+          .then(resp => {
+            this.results = resp.data
+          })
+          .finally(() => this.loading = false)
+      }
     },
 
     filter(...x) {
@@ -116,8 +130,18 @@ export default {
     }
   },
   mounted() {
-    if (this.value) {
+    if (this.endpoint && this.value) {
       this.triggerRemoteSearch(this.value)
+    }
+
+    if (!this.endpoint && this.value) {
+      this.theValue = this.value.id
+    }
+
+    if (!this.endpoint && this.items) {
+      this.results = this.items
+      this.loading = false
+      this.is_remote = false
     }
   }
 }

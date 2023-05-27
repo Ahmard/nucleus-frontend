@@ -19,25 +19,31 @@
       <el-icon>
         <el-icon-house/>
       </el-icon>
-      <span>Dashboard</span>
+      <template #title>Dashboard</template>
     </el-menu-item>
     <el-menu-item index="2" @click="rr('/projects')">
       <el-icon>
         <el-icon-menu/>
       </el-icon>
-      <span>Projects</span>
+      <template #title>Projects</template>
     </el-menu-item>
-    <el-menu-item index="3" @click="rr('/expenses')">
+    <el-menu-item index="3" @click="rr('/budgets')">
+      <el-icon>
+        <el-icon-money/>
+      </el-icon>
+      <template #title>Budgets</template>
+    </el-menu-item>
+    <el-menu-item index="4" @click="rr('/expenses')">
       <el-icon>
         <el-icon-wallet/>
       </el-icon>
-      <span>Expenses</span>
+      <template #title>Expenses</template>
     </el-menu-item>
-    <el-menu-item index="4" @click="rr('/todos')">
+    <el-menu-item index="5" @click="rr('/todos')">
       <el-icon>
         <el-icon-list/>
       </el-icon>
-      <span>Todo</span>
+      <template #title>Todo</template>
     </el-menu-item>
   </el-menu>
 </template>

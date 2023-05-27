@@ -105,7 +105,9 @@ async function submitForm() {
         showClose: true,
       })
 
-      setTimeout(() => window.location.href = '/', 2000);
+      setTimeout(() => {
+        window.location.href = localStorage.getItem('auth.redirect') ?? '/'
+      }, 1500);
     })
     .catch(axiosHandleError)
 
