@@ -12,3 +12,21 @@
 .el-button-primary:hover {
   /*background-color: var(--bs-primary-border-color) !important;*/
 }
+
+.force-show-sm {
+}
+
+.hide-btn-icon button .el-icon ~ span {
+  display: none !important;
+}
+
+.list-item {
+  padding: 10px;
+  border-bottom: 1px solid var(--el-card-border-color);
+}
+
+@media (max-width: 768px) {
+  button:not(.force-show-sm) .el-icon ~ span {
+    display: none !important;
+  }
+}
