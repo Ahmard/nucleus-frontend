@@ -1,66 +1,56 @@
 <template>
   <div>
     <el-dialog
-      v-model="dialog_state"
-      :title="props.mode === 'create' ? 'Create Expense' : 'Update Expense'"
-      width="380px"
       destroy-on-close
+      v-model="dialog_state"
+      :title="props.mode === 'create' ? 'Create Budget' : 'Update Budget'"
+      width="380px"
       :close-on-press-escape="false"
       :close-on-click-modal="false">
     <span>
       <el-form :model="form" label-position="top" :rules="rules" ref="form_ref">
-        <el-form-item label="Spending Amount" prop="amount" required>
+        <el-form-item label="Budgeted Amount" prop="amount" required>
           <el-input
             v-model="form.amount"
             type="text"
             size="large"
-            maxlength="150"
-            show-word-limit
             :disabled="is_submitting"
-            :prefix-icon="ElIconDocument"
-            placeholder="Example: 1000"
+            :prefix-icon="ElIconMoney"
+            placeholder="Example: 100,000"
             clearable
           />
         </el-form-item>
 
-        <el-form-item label="Spending Time" prop="spent_at" required>
-          <el-date-picker
-            class="w-100"
-            size="large"
-            v-model="form.spent_at"
-            type="datetime"
-            format="DD-MM-YYYY HH:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            placeholder="Select date and time"
-            :shortcuts="date_shortcut()"
-          />
-        </el-form-item>
+        <div class="row">
+          <div class="col-md-6">
+            <combobox
+              :multiple="false"
+              :items="months"
+              name="month"
+              text-key="text"
+              value-key="id"
+              label="Month"
+              placeholder="Choose Month"
+              :value="form.month"
+              @change="v => form.month = v"
+            />
+          </div>
+          <div class="col-md-6">
+            <el-form-item label="Year" prop="year" required>
+              <el-input
+                v-model="form.year"
+                type="number"
+                size="large"
+                :disabled="true"
+                clearable
+              />
+            </el-form-item>
+          </div>
+        </div>
 
-        <combobox
-          :multiple="false"
-          text-key="name"
-          name="project_id"
-          value-key="project_id"
-          label="Choose Project"
-          :endpoint="project_endpoint"
-          v-model="form.project_id"
-          @change="v => form.project_id = v"
-        />
-
-        <combobox
-          :multiple="false"
-          text-key="title"
-          name="budget_id"
-          value-key="budget_id"
-          label="Choose Budget"
-          :endpoint="budget_endpoint"
-          v-model="form.budget_id"
-          @change="v => form.budget_id = v"
-        />
-
-        <el-form-item label="Spending Narration" prop="narration" required>
+        <el-form-item label="Budget Comment" prop="comment">
           <el-input
-            v-model="form.narration"
+            v-model="form.comment"
             type="textarea"
             size="large"
             maxlength="1000"
@@ -68,7 +58,7 @@
             :disabled="is_submitting"
             :autosize="{ minRows: 2, maxRows: 4 }"
             :prefix-icon="ElIconDocumentCopy"
-            placeholder="Example: Bought back & front doors"
+            placeholder="Comment for this budget"
           />
         </el-form-item>
       </el-form>
@@ -97,10 +87,10 @@ import {xhrPost, xhrPut} from "~/helpers/xhr";
 import {useApiUrl} from "~/composables/url";
 import {PropType} from "@vue/runtime-core";
 import {LooseObject} from "~/types/loose.object";
-import {date_shortcut, formatInputValue, removeCommas} from "~/helpers/form";
+import {formatInputValue, removeCommas} from "~/helpers/form";
 import {cloneDeep} from "lodash";
 import {from_cent} from "~/helpers/monetery";
-import {Expense} from "~/models/expense";
+import {generateMonthOptions, getMonthName} from "~/helpers/date_time";
 
 enum DialogMode {
   CREATE = 'create',
@@ -111,45 +101,43 @@ const emit = defineEmits(['input', 'created', 'updated'])
 const props = defineProps({
   state: {type: Boolean},
   mode: {type: String as PropType<DialogMode>, default: DialogMode.CREATE},
-  expense: {type: Object, required: true},
+  budget: {type: Object, required: true},
 })
 
 let value = toRef(props, 'state')
-let expense = toRef(props, 'expense')
+let budget = toRef(props, 'budget')
 let dialog_state = ref(false)
 let is_submitting = ref(false)
 
-const project_endpoint = useApiUrl('projects')
-const budget_endpoint = useApiUrl('budgets')
 const form_ref = ref<FormInstance>()
-
 const date = new Date()
+
 const form = reactive({
   amount: '',
-  narration: '',
-  project_id: '',
-  budget_id: '',
-  spent_at: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${new Date().toLocaleTimeString()}`,
+  comment: '',
+  month: date.getMonth(),
+  year: date.getFullYear(),
 })
 
 const amount = toRef(form, 'amount')
+const months = generateMonthOptions()
 
 const rules = reactive({
   amount: [required('amount')],
-  spent_at: [required('spent_at')],
-  project_id: [required('spent_at')],
-  budget_id: [required('spent_at')],
-  narration: [required('amount')],
+  month: [required('month')],
+  year: [required('year')],
 })
 
 watch(value, val => dialog_state.value = val)
 watch(dialog_state, val => emit('input', val))
-watch(expense, function (p: LooseObject) {
-  form.amount = from_cent(p[0].amount).toString()
-  form.spent_at = p[0].spent_at
-  form.narration = p[0].narration
-  form.project_id = p[0].project_id
-  form.budget_id = p[0].budget_id
+watch(budget, function (p: LooseObject) {
+  form.amount = from_cent(p.amount).toString()
+  form.comment = p.comment
+  form.year = p.year
+  form.month = {
+    id: p.month,
+    text: getMonthName(p.month)
+  }
 })
 
 watch(amount, value1 => form.amount = formatInputValue(value1))
@@ -174,17 +162,23 @@ async function submitForm(el_form: FormInstance) {
   })
 }
 
+function clean_up_form() {
+  form.amount = ""
+  form.comment = ""
+  form.month = date.getMonth()
+  form.year = date.getFullYear()
+}
+
 function create() {
   const payload = cloneDeep(form)
   // @ts-ignore
   payload.amount = removeCommas(payload.amount, true)
-  payload.spent_at = Expense.cleanupTimestamp(payload.spent_at)
 
-  xhrPost(useApiUrl('expenses'), payload)
+  xhrPost(useApiUrl('budgets'), payload)
     .then(resp => {
       ElNotification({
         title: 'Success',
-        message: 'Your expense has been created',
+        message: 'Your budget has been created',
         type: 'success',
       })
 
@@ -192,9 +186,7 @@ function create() {
 
       emit('created', resp.data)
 
-      form.amount = ""
-      form.spent_at = ""
-      form.narration = ""
+      clean_up_form()
     })
     .finally(() => is_submitting.value = false)
 }
@@ -203,13 +195,12 @@ function update() {
   const payload = cloneDeep(form)
   // @ts-ignore
   payload.amount = removeCommas(payload.amount, true)
-  payload.spent_at = Expense.cleanupTimestamp(payload.spent_at)
 
-  xhrPut(useApiUrl(`expenses/${expense.value[0]['expense_id']}`), payload)
+  xhrPut(useApiUrl(`budgets/${budget.value['budget_id']}`), payload)
     .then(resp => {
       ElNotification({
         title: 'Success',
-        message: 'Your expense has been updated',
+        message: 'Your budget has been updated',
         type: 'success',
       })
 
@@ -217,16 +208,12 @@ function update() {
 
       emit('updated', resp.data)
 
-      form.amount = ""
-      form.spent_at = ""
-      form.narration = ""
+      clean_up_form()
     })
     .finally(() => is_submitting.value = false)
 }
 </script>
 
-<style>
-  .el-date-editor .el-input__wrapper {
-    width: calc(100% - 30px) !important;
-  }
+<style scoped>
+
 </style>
