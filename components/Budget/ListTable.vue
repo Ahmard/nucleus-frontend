@@ -4,6 +4,9 @@
       <el-table-column label="Amount" prop="amount">
         <template #default="scope">{{ formatKobo(scope.row.amount) }}</template>
       </el-table-column>
+      <el-table-column label="Used Amount" prop="amount_used">
+        <template #default="scope">{{ formatKobo(scope.row.amount_used) }}</template>
+      </el-table-column>
       <el-table-column label="Month" prop="month">
         <template #default="scope">{{ getMonthName(scope.row.month - 1) }}</template>
       </el-table-column>

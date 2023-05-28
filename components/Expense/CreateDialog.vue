@@ -47,17 +47,6 @@
           @change="v => form.project_id = v"
         />
 
-        <combobox
-          :multiple="false"
-          text-key="title"
-          name="budget_id"
-          value-key="budget_id"
-          label="Choose Budget"
-          :endpoint="budget_endpoint"
-          v-model="form.budget_id"
-          @change="v => form.budget_id = v"
-        />
-
         <el-form-item label="Spending Narration" prop="narration" required>
           <el-input
             v-model="form.narration"
@@ -120,7 +109,6 @@ let dialog_state = ref(false)
 let is_submitting = ref(false)
 
 const project_endpoint = useApiUrl('projects')
-const budget_endpoint = useApiUrl('budgets')
 const form_ref = ref<FormInstance>()
 
 const date = new Date()
@@ -128,7 +116,6 @@ const form = reactive({
   amount: '',
   narration: '',
   project_id: '',
-  budget_id: '',
   spent_at: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${new Date().toLocaleTimeString()}`,
 })
 
@@ -138,7 +125,6 @@ const rules = reactive({
   amount: [required('amount')],
   spent_at: [required('spent_at')],
   project_id: [required('spent_at')],
-  budget_id: [required('spent_at')],
   narration: [required('amount')],
 })
 
@@ -149,7 +135,6 @@ watch(expense, function (p: LooseObject) {
   form.spent_at = p[0].spent_at
   form.narration = p[0].narration
   form.project_id = p[0].project_id
-  form.budget_id = p[0].budget_id
 })
 
 watch(amount, value1 => form.amount = formatInputValue(value1))
@@ -174,6 +159,12 @@ async function submitForm(el_form: FormInstance) {
   })
 }
 
+function cleanup_form() {
+  form.amount = ""
+  form.spent_at = ""
+  form.narration = ""
+}
+
 function create() {
   const payload = cloneDeep(form)
   // @ts-ignore
@@ -192,9 +183,7 @@ function create() {
 
       emit('created', resp.data)
 
-      form.amount = ""
-      form.spent_at = ""
-      form.narration = ""
+      cleanup_form()
     })
     .finally(() => is_submitting.value = false)
 }
@@ -217,9 +206,7 @@ function update() {
 
       emit('updated', resp.data)
 
-      form.amount = ""
-      form.spent_at = ""
-      form.narration = ""
+      cleanup_form()
     })
     .finally(() => is_submitting.value = false)
 }
