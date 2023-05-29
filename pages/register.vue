@@ -131,11 +131,11 @@ console.log(useRuntimeConfig().public.BACKEND_SERVER)
 
 let submitting = ref(false);
 const form = reactive({
-  email: 'me@ahmard.com',
-  first_name: 'Ahmad',
-  last_name: 'Mustapha',
-  password: '1234',
-  password_confirmation: '1234',
+  email: '',
+  first_name: '',
+  last_name: '',
+  password: '',
+  password_confirmation: '',
 })
 
 const rules = []

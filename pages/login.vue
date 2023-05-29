@@ -86,8 +86,8 @@ definePageMeta({
 const nuxt = useNuxtApp();
 const submitting = ref(false);
 const form = reactive({
-  email: 'me@ahmard.com',
-  password: '1234',
+  email: '',
+  password: '',
 })
 
 const rules = []
