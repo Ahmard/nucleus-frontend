@@ -29,6 +29,7 @@
                       :prefix-icon="User"
                       v-model="form.first_name"
                       :disabled="submitting"
+                      placeholder="Ex: Jane"
                     />
                   </el-form-item>
                 </div>
@@ -41,6 +42,7 @@
                       :prefix-icon="User"
                       v-model="form.last_name"
                       :disabled="submitting"
+                      placeholder="Ex: Doe"
                     />
                   </el-form-item>
                 </div>
@@ -54,6 +56,7 @@
                   v-model="form.email"
                   :prefix-icon="Message"
                   :disabled="submitting"
+                  placeholder="Ex: jane.doe@example.net"
                 />
               </el-form-item>
 
@@ -68,6 +71,7 @@
                       :prefix-icon="Key"
                       v-model="form.password"
                       :disabled="submitting"
+                      placeholder="Something secret"
                     />
                   </el-form-item>
                 </div>
@@ -81,6 +85,7 @@
                       :disabled="submitting"
                       id="password_confirmation"
                       v-model="form.password_confirmation"
+                      placeholder="Confirm your password"
                     />
                   </el-form-item>
                 </div>

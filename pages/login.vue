@@ -28,6 +28,7 @@
                   type="email"
                   :disabled="submitting"
                   :prefix-icon="Message"
+                  placeholder="Ex: me@ahmard.com"
                 />
               </el-form-item>
 
@@ -39,6 +40,7 @@
                   :disabled="submitting"
                   :prefix-icon="Key"
                   show-password
+                  placeholder="Ex: 1234"
                 />
               </el-form-item>
 
@@ -110,6 +112,7 @@ async function submitForm() {
       }, 1500);
     })
     .catch(axiosHandleError)
+    .finally(() => submitting.value = false)
 
 }
 
