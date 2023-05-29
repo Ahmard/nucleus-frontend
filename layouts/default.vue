@@ -10,6 +10,7 @@
       </el-header>
 
       <el-main style="overflow: hidden">
+        <nuxt-loading-indicator />
         <nuxt-page></nuxt-page>
       </el-main>
     </el-container>
