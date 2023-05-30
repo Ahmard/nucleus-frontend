@@ -109,7 +109,7 @@ async function submitForm() {
 
       setTimeout(() => {
         window.location.href = localStorage.getItem('auth.redirect') ?? '/'
-      }, 1500);
+      }, 1000);
     })
     .catch(axiosHandleError)
     .finally(() => submitting.value = false)
