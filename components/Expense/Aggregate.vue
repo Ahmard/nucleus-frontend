@@ -3,8 +3,8 @@
     <el-row>
       <el-col
         :span="5"
-        :xs="11"
-        :sm="11"
+        :xs="22"
+        :sm="22"
         :md="forceResize && colMd > 6 ? colMd : 5"
         class="statistic-row">
         <div class="statistic-card pt-3 pb-2 px-3 shadow-sm">
@@ -48,9 +48,10 @@
 
       <el-col
         :span="6"
-        :xs="12" :sm="12"
+        :xs="22"
+        :sm="22"
         :md="colMd"
-        class="statistic-row ms-2">
+        class="statistic-row ms-lg-2">
         <div class="statistic-card pt-3 pb-2 px-3 shadow-sm">
           <el-statistic
             :value="stats?.week_expenses ?? 0"
@@ -92,8 +93,8 @@
 
       <el-col
         :span="6"
-        :xs="11"
-        :sm="11"
+        :xs="22"
+        :sm="22"
         :md="colMd"
         :class="{'big-col': colMd > 6}"
         class="statistic-row ms-lg-2">
@@ -138,11 +139,11 @@
 
       <el-col
         :span="6"
-        :xs="12"
-        :sm="12"
+        :xs="22"
+        :sm="22"
         :md="colMd"
         :class="{'big-col': colMd > 6}"
-        class="statistic-row ms-2">
+        class="statistic-row ms-lg-2">
         <div class="statistic-card pt-3 pb-2 px-3 shadow-sm">
           <el-statistic
             :value="stats?.year_expenses ?? 0"

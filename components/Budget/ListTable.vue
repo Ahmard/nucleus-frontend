@@ -1,6 +1,34 @@
 <template>
   <div>
     <datatable :endpoint="props.endpoint" :key="tableKey" @row-click="onRowClick">
+      <el-table-column type="expand">
+        <template #default="scope">
+          <div class="hidden-md-and-up">
+            <p class="list-item ps-3">Amount: {{ formatKobo(scope.row.amount) }}</p>
+            <p class="list-item ps-3">Used Amount: {{ formatKobo(scope.row.amount_used) }}</p>
+            <p class="list-item ps-3">Month: {{ getMonthName(scope.row.month - 1) }}</p>
+            <p class="list-item ps-3">Year: {{ scope.row.year }}</p>
+            <p class="list-item ps-3">Spent At: {{ scope.row.spent_at }}</p>
+            <p class="list-item ps-3">Created At: {{ scope.row.created_at }}</p>
+            <div class="ps-3">
+              <el-button
+                size="small"
+                :icon="ElIconEdit"
+                @click="handleEdit(scope.$index, scope.row)">
+                Edit
+              </el-button>
+              <el-button
+                size="small"
+                type="danger"
+                :icon="ElIconDelete"
+                @click="handleDelete(scope.$index, scope.row)">
+                Delete
+              </el-button>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+
       <el-table-column label="Amount" prop="amount">
         <template #default="scope">{{ formatKobo(scope.row.amount) }}</template>
       </el-table-column>

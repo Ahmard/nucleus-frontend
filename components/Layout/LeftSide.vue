@@ -15,31 +15,31 @@
         alt=""
       />
     </div>
-    <el-menu-item index="1" @click="rr('/')">
+    <el-menu-item index="1" @click="onLinkClick('/')">
       <el-icon>
         <el-icon-house/>
       </el-icon>
       <template #title>Dashboard</template>
     </el-menu-item>
-    <el-menu-item index="2" @click="rr('/projects')">
+    <el-menu-item index="2" @click="onLinkClick('/projects')">
       <el-icon>
         <el-icon-menu/>
       </el-icon>
       <template #title>Projects</template>
     </el-menu-item>
-    <el-menu-item index="3" @click="rr('/budgets')">
+    <el-menu-item index="3" @click="onLinkClick('/budgets')">
       <el-icon>
         <el-icon-money/>
       </el-icon>
       <template #title>Budgets</template>
     </el-menu-item>
-    <el-menu-item index="4" @click="rr('/expenses')">
+    <el-menu-item index="4" @click="onLinkClick('/expenses')">
       <el-icon>
         <el-icon-wallet/>
       </el-icon>
       <template #title>Expenses</template>
     </el-menu-item>
-    <el-menu-item index="5" @click="rr('/todos')">
+    <el-menu-item index="5" @click="onLinkClick('/todos')">
       <el-icon>
         <el-icon-list/>
       </el-icon>
@@ -49,8 +49,10 @@
 </template>
 
 <script lang="ts" setup>
+
 import {rr} from "~/helpers/url";
 
+const emit = defineEmits(['linkClick'])
 const props = defineProps({
   isCollapsed: Boolean
 })
@@ -61,6 +63,11 @@ function handleOpen() {
 
 function handleClose() {
 
+}
+
+function onLinkClick(url: string) {
+  emit('linkClick', url)
+  rr(url)
 }
 </script>
 

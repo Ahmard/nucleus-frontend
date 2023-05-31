@@ -1,7 +1,24 @@
 <template>
   <div>
     <datatable :endpoint="props.endpoint" :key="tableKey" @row-click="onRowClick">
-      <el-table-column label="Amount" prop="amount">
+      <el-table-column type="expand">
+        <template #default="props">
+          <div class="hidden-md-and-up">
+            <p class="list-item ps-3">Amount: {{ props.row[0].amount }}</p>
+            <p class="list-item ps-3">Narration: {{ props.row[0].narration }}</p>
+            <p class="list-item ps-3">
+              Project:
+              <nuxt-link :to="`/projects/${props.row[1].project_id}`">
+                {{ props.row[1].name }}
+              </nuxt-link>
+            </p>
+            <p class="list-item ps-3">Spent At: {{ props.row[0].spent_at }}</p>
+            <p class="list-item ps-3">Created At: {{ props.row[0].created_at }}</p>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Amount" prop="amount" class="hidden-sm-and-down">
         <template #default="scope">{{ formatKobo(scope.row[0].amount) }}</template>
       </el-table-column>
       <el-table-column label="Narration" prop="narration">

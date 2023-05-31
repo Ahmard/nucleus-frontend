@@ -25,6 +25,31 @@
           <div class="text item">
             <div style="min-height: 200px; width: inherit">
               <datatable :endpoint="list_endpoint" :key="tableKey" @row-click="onRowClick">
+                <el-table-column type="expand">
+                  <template #default="scope">
+                    <div class="hidden-md-and-up">
+                      <p class="list-item ps-3">Name: {{ scope.row.name }}</p>
+                      <p class="list-item ps-3">Description: {{ scope.row.description }}</p>
+                      <p class="list-item ps-3">Created At: {{ scope.row.created_at }}</p>
+                      <div class="ps-3">
+                        <el-button
+                          size="small"
+                          :icon="ElIconEdit"
+                          @click="handleEdit(scope.$index, scope.row)">
+                          Edit
+                        </el-button>
+                        <el-button
+                          size="small"
+                          type="danger"
+                          :icon="ElIconDelete"
+                          @click="handleDelete(scope.$index, scope.row)">
+                          Delete
+                        </el-button>
+                      </div>
+                    </div>
+                  </template>
+                </el-table-column>
+
                 <el-table-column label="Name" prop="name"/>
                 <el-table-column label="Description" prop="description"/>
                 <el-table-column label="Created At" prop="created_at"/>
@@ -68,6 +93,8 @@ import {Project} from "~/models/project";
 import {useApiUrl} from "~/composables/url";
 import {xhrDelete} from "~/helpers/xhr";
 import {Expense} from "~/models/expense";
+import {formatKobo} from "~/helpers/monetery";
+import {getMonthName} from "~/helpers/date_time";
 
 let mode = ref('create');
 let tableKey = ref(Date.now())

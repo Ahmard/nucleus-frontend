@@ -14,6 +14,7 @@
 }
 
 .force-show-sm {
+  display: block !important;
 }
 
 .hide-btn-icon button .el-icon ~ span {
@@ -28,5 +29,10 @@
 @media (max-width: 768px) {
   button:not(.force-show-sm) .el-icon ~ span {
     display: none !important;
+  }
+
+  .el-main {
+    padding-left: 0!important;
+    padding-right: 5px!important;
   }
 }

@@ -31,6 +31,7 @@
 
 <script>
 import {xhrGet} from "~/helpers/xhr";
+import 'element-plus/theme-chalk/display.css'
 
 export default {
   name: "Datatable",
@@ -84,7 +85,6 @@ export default {
 
       xhrGet(this.endpoint, params)
         .then(resp => {
-          console.log(resp)
           this.failure = false
           this.tableData = resp.data
           this.total_data = resp.total_records

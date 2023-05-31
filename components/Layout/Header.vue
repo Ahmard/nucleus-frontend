@@ -14,13 +14,13 @@
     </div>
     <!--    <el-menu-item index="1">Nucleus Family</el-menu-item>-->
     <div class="flex-grow-1"/>
-    <el-menu-item index="2" :class="{'d-none': isMobileView}">
+    <el-menu-item index="2" :class="{'d-none': is_mobile_view}">
       <el-icon>
         <el-icon-list/>
       </el-icon>
       Todo
     </el-menu-item>
-    <el-menu-item index="3" :class="{'d-none': isMobileView}">
+    <el-menu-item index="3" :class="{'d-none': is_mobile_view}">
       <el-icon>
         <el-icon-calendar/>
       </el-icon>
@@ -62,28 +62,29 @@ import {ref} from "vue";
 import {Expand, Fold} from "@element-plus/icons-vue";
 import {useAuth} from "#auth/runtime/composables";
 import {useRouter} from "#app/composables/router";
+import {isMobileView} from "~/helpers/dom";
 
 let activeIndex = ref("");
 const emit = defineEmits(['toggle_sidebar'])
 
 let canOverrideSidebarToggleState = false
-let isMobileView = ref(window.innerWidth <= 768)
+let is_mobile_view = ref(isMobileView())
 let isCollapsed = ref(localStorage.getItem('is_sidebar_collapsed') === 'yes')
 
 emit('toggle_sidebar', isCollapsed.value)
 
-function toggleSidebarResponsively() {
-  let isMobile = window.innerWidth <= 768
+function toggleSidebarResponsively(force_hide_sidebar = false) {
+  let isMobile = isMobileView()
 
   if (isMobile) {
-    isMobileView.value = true
-    doToggleSidebar(true)
+    is_mobile_view.value = true
+    doToggleSidebar(true, force_hide_sidebar)
     canOverrideSidebarToggleState = true
   }
 
   if (!isMobile && canOverrideSidebarToggleState) {
-    isMobileView.value = false
-    doToggleSidebar(false)
+    is_mobile_view.value = false
+    doToggleSidebar(false, force_hide_sidebar)
   }
 }
 
@@ -95,7 +96,25 @@ function toggleSidebar() {
   doToggleSidebar()
 }
 
-function doToggleSidebar(state: boolean | null = null) {
+function doToggleSidebar(state: boolean | null = null, force_hide_sidebar = false) {
+  const aside = document.querySelector('aside');
+
+  if (isMobileView()) {
+    if (aside) {
+      if (!force_hide_sidebar && isCollapsed.value) {
+        aside.style.display = 'block'
+      }
+
+      if (force_hide_sidebar || !isCollapsed.value) {
+        setTimeout(() => aside.style.display = 'none', 350)
+      }
+    }
+  }
+
+  if (!isMobileView() && aside && !force_hide_sidebar) {
+    aside.style.display = 'block'
+  }
+
   isCollapsed.value = state !== null ? state : !isCollapsed.value;
   localStorage.setItem('is_sidebar_collapsed', isCollapsed.value ? 'yes' : 'no')
   emit('toggle_sidebar', isCollapsed.value)
@@ -107,11 +126,11 @@ async function logout() {
   await useRouter().push('/login')
 }
 
-if (isMobileView.value) {
-  toggleSidebarResponsively()
+if (is_mobile_view.value) {
+  nextTick(() => toggleSidebarResponsively(true))
 }
 
-window.addEventListener('resize', toggleSidebarResponsively);
+window.addEventListener('resize', () => toggleSidebarResponsively(isMobileView()));
 </script>
 
 <style>

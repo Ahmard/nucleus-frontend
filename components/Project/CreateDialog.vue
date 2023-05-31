@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-dialog
+      class="create-project-dialog"
       v-model="dialog_state"
       :title="props.mode === 'create' ? 'Create Project' : 'Update Project'"
-      width="380px"
       :close-on-press-escape="false"
       :close-on-click-modal="false">
     <span>
@@ -155,6 +155,13 @@ function update() {
 }
 </script>
 
-<style scoped>
-
+<style>
+.create-project-dialog {
+  width: 400px;
+}
+@media (max-width: 568px) {
+  .create-project-dialog {
+    width: calc(100vw - 10px);
+  }
+}
 </style>
