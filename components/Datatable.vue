@@ -16,6 +16,16 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <div class="d-flex justify-content-center mt-3">
+      <pagination
+        :current-page="current_page"
+        :page-size="per_page"
+        :total-data="total_data"
+        @page-change="p => current_page = p"
+        @size-change="s => per_page = s"
+      />
+    </div>
   </div>
 </template>
 
@@ -27,10 +37,17 @@ export default {
   props: {
     tableName: {default: 'Records'},
     endpoint: {default: null},
+    perPage: {default: 10},
   },
   watch: {
-    search(val) {
-      this.fetchData(val)
+    search() {
+      nextTick(() => this.fetchData())
+    },
+    current_page() {
+      nextTick(() => this.fetchData())
+    },
+    per_page() {
+      nextTick(() => this.fetchData())
     }
   },
   data() {
@@ -40,6 +57,9 @@ export default {
       processing: true,
       tableData: [],
       search: '',
+      per_page: this.perPage,
+      current_page: 1,
+      total_data: 0,
     }
   },
   methods: {
@@ -54,19 +74,27 @@ export default {
     handleDelete(index, row) {
       console.log(index, row);
     },
-    fetchData(q) {
+    fetchData() {
       this.processing = true
-      xhrGet(this.endpoint, {search: q})
+      const params = {
+        search: this.search,
+        page: this.current_page,
+        per_page: this.per_page,
+      };
+
+      xhrGet(this.endpoint, params)
         .then(resp => {
+          console.log(resp)
           this.failure = false
           this.tableData = resp.data
+          this.total_data = resp.total_records
         })
         .catch(() => this.failure = true)
         .finally(() => this.processing = false)
     }
   },
   mounted() {
-    this.fetchData('')
+    this.fetchData()
   }
 }
 </script>
