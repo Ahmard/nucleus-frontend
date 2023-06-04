@@ -112,6 +112,7 @@ function onRowClick(data: Project) {
 
 function openCreationDialog() {
   isCreationDialogOpened.value = true
+  mode.value = 'create'
 }
 
 function handleCreatedProject(project: Project) {

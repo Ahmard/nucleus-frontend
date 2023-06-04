@@ -78,6 +78,7 @@ definePageMeta({
 })
 
 function openCreationDialog() {
+  mode.value = 'create'
   isCreationDialogOpened.value = true
 }
 
@@ -89,7 +90,6 @@ function handleCreatedExpense(expense: Expense) {
 }
 
 function on_start_edit(expense: Expense) {
-  console.log(expense)
   mode.value = 'edit'
   selected_expense = expense
   isCreationDialogOpened.value = true

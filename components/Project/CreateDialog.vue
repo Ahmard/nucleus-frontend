@@ -89,7 +89,14 @@ const rules = reactive({
   description: [required('name')],
 })
 
-watch(value, val => dialog_state.value = val)
+watch(value, val => {
+  dialog_state.value = val
+
+  if (props.mode === 'create') {
+    form.name = ''
+    form.description = ''
+  }
+})
 watch(dialog_state, val => emit('input', val))
 watch(project, function (p: LooseObject) {
   form.name = p.name
@@ -159,6 +166,7 @@ function update() {
 .create-project-dialog {
   width: 400px;
 }
+
 @media (max-width: 568px) {
   .create-project-dialog {
     width: calc(100vw - 10px);

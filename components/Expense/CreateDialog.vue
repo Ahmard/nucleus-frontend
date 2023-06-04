@@ -128,7 +128,17 @@ const rules = reactive({
   narration: [required('amount')],
 })
 
-watch(value, val => dialog_state.value = val)
+watch(value, val => {
+  if (props.mode === 'create') {
+    form.amount = ''
+    form.narration = ''
+    form.project_id = ''
+    form.spent_at = ''
+  }
+
+  dialog_state.value = val
+})
+
 watch(dialog_state, val => emit('input', val))
 watch(expense, function (p: LooseObject) {
   form.amount = from_cent(p[0].amount).toString()
@@ -213,7 +223,7 @@ function update() {
 </script>
 
 <style>
-  .el-date-editor .el-input__wrapper {
-    width: calc(100% - 30px) !important;
-  }
+.el-date-editor .el-input__wrapper {
+  width: calc(100% - 30px) !important;
+}
 </style>

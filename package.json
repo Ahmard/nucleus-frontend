@@ -11,7 +11,7 @@
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.4",
     "@types/node": "^18",
-    "nuxt": "^3.5.1",
+    "nuxt": "^3.5.2",
     "sass": "^1.62.1"
   },
   "dependencies": {
@@ -19,7 +19,7 @@
     "@nuxt-alt/auth": "^2.5.0",
     "@nuxt-alt/http": "^1.6.4",
     "@pinia/nuxt": "^0.4.10",
-    "element-plus": "^2.3.4",
+    "element-plus": "^2.3.6",
     "lodash": "^4.17.21",
     "pinia": "^2.0.36"
   }

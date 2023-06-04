@@ -128,7 +128,16 @@ const rules = reactive({
   year: [required('year')],
 })
 
-watch(value, val => dialog_state.value = val)
+watch(value, val => {
+  if (props.mode === 'create') {
+    form.amount = ''
+    form.comment = ''
+    form.month = date.getMonth()
+    form.year = date.getFullYear()
+  }
+
+  dialog_state.value = val
+})
 watch(dialog_state, val => emit('input', val))
 watch(budget, function (p: LooseObject) {
   form.amount = from_cent(p.amount).toString()

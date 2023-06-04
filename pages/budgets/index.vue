@@ -78,6 +78,7 @@ definePageMeta({
 })
 
 function openCreationDialog() {
+  mode.value = 'create'
   isCreationDialogOpened.value = true
 }
 
