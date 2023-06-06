@@ -22,7 +22,6 @@ jobs:
           npm install
       - name: Run build task
         run: |
-          echo "${{ vars.APP_NAME }}"
           cp .env.example .env
           echo APP_NAME=${{ vars.APP_NAME }} >> .env
           echo BACKEND_SERVER=${{ vars.BACKEND_SERVER }} >> .env
