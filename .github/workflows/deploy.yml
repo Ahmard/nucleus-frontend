@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: '16.x'
       - name: Install npm dependencies
-        run: npm install
+        run: |
+          cp .env.example .env
+          npm install
       - name: Run build task
         run: |
           echo "${{ vars.APP_NAME }}"
