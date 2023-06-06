@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 // @ts-ignore
+const APP_NAME: string = process.env.APP_NAME;
+// @ts-ignore
 const BACKEND_SERVER: string = process.env.BACKEND_SERVER;
 
 export default defineNuxtConfig({
@@ -13,8 +15,8 @@ export default defineNuxtConfig({
   ],
   app: {
     head: {
-      title: 'Nucleus',
-      titleTemplate: '%s - Nucleus',
+      title: APP_NAME,
+      titleTemplate: `%s - ${APP_NAME}`,
       meta: [
         {
           name: 'viewport', content: 'width=device-width, initial-scale=1'
@@ -22,7 +24,7 @@ export default defineNuxtConfig({
         {
           hid: 'description',
           name: 'description',
-          content: 'Nucleus, day-to-day activities management',
+          content: `${APP_NAME}, day-to-day activities management`,
         },
       ],
       link: [

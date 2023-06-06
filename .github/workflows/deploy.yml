@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Installation Dependencies
+        run: npm install
+      - name: Static Html Generation
+        run: |
+          echo "${{ vars.APP_NAME }}"
+          cp .env.example .env
+          echo APP_NAME=${{ vars.APP_NAME }} >> .env
+          echo BACKEND_SERVER=${{ vars.BACKEND_SERVER }} >> .env
+          echo BACKEND_API_VERSION=${{ vars.BACKEND_API_VERSION }} >> .env
+          npm run generate
+      - name: Deployment
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          EXCLUDE: "/dist/, /node_modules/"
