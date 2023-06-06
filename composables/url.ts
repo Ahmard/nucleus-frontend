@@ -4,5 +4,6 @@ export function useUrl(uri?: string): string {
 }
 
 export function useApiUrl(uri?: string): string {
-  return useUrl(`api/v1/${uri}`)
+  const config = useRuntimeConfig()
+  return useUrl(`api/${config.public.BACKEND_API_VERSION}/${uri}`)
 }

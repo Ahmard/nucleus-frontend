@@ -4,6 +4,10 @@
 const APP_NAME: string = process.env.APP_NAME;
 // @ts-ignore
 const BACKEND_SERVER: string = process.env.BACKEND_SERVER;
+// @ts-ignore
+const BACKEND_API_VERSION: string = process.env.BACKEND_API_VERSION;
+
+console.log(BACKEND_SERVER)
 
 export default defineNuxtConfig({
 // @ts-ignore
@@ -37,7 +41,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      BACKEND_SERVER: BACKEND_SERVER
+      APP_NAME: APP_NAME,
+      BACKEND_SERVER: BACKEND_SERVER,
+      BACKEND_API_VERSION: BACKEND_API_VERSION,
     }
   },
 
@@ -71,13 +77,13 @@ export default defineNuxtConfig({
         url: BACKEND_SERVER,
         endpoints: {
           login: {
-            url: '/api/v1/auth/login'
+            url: `/api/${BACKEND_API_VERSION}/auth/login`
           },
           logout: {
-            url: '/api/v1/auth/logout'
+            url: `/api/${BACKEND_API_VERSION}/auth/logout`
           },
           user: {
-            url: '/api/v1/auth/me'
+            url: `/api/${BACKEND_API_VERSION}/auth/me`
           }
         },
         token: {
