@@ -1,29 +1,33 @@
 name: Deploy
 
-on:
-  push:
-    branches: [ "main" ]
+on: [push]
+#on:
+#  push:
+#    branches: [ "main" ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-      - name: Installation Dependencies
-        run: npm install
-      - name: Static Html Generation
+      - name: Install npm dependencies
         run: |
-          echo "${{ vars.APP_NAME }}"
+          cp .env.example .env
+          npm install
+      - name: Run build task
+        run: |
           cp .env.example .env
           echo APP_NAME=${{ vars.APP_NAME }} >> .env
           echo BACKEND_SERVER=${{ vars.BACKEND_SERVER }} >> .env
           echo BACKEND_API_VERSION=${{ vars.BACKEND_API_VERSION }} >> .env
           npm run generate
-      - name: Deployment
+      - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

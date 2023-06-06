@@ -18,7 +18,7 @@
                 </template>
               </el-image>
             </div>
-            <el-form class="mt-3" @submit.prevent="submitForm">
+            <el-form class="mt-3" :model="form" :rules="rules" ref="ref_reg_form">
               <div class="row">
                 <div class="col-md-6">
                   <el-form-item size="large" prop="first_name" label-width="0">
@@ -96,7 +96,8 @@
                   native-type="submit"
                   type="primary"
                   class="w-100 el-button-primary"
-                  :loading="submitting">Create Account
+                  :loading="submitting"
+                  @click.prevent="submitForm(ref_reg_form)">Create Account
                 </el-button>
               </el-form-item>
 
@@ -125,6 +126,8 @@ import {reactive, ref} from 'vue'
 import {Key, Message, User} from '@element-plus/icons-vue'
 import {useApiUrl} from "~/composables/url";
 import {xhrPost} from "~/helpers/xhr";
+import {email, length, required} from "~/helpers/from_validation";
+import {FormInstance} from "element-plus";
 
 setPageLayout('plain');
 
@@ -132,9 +135,9 @@ definePageMeta({
   middleware: 'guest'
 })
 
-console.log(useRuntimeConfig().public.BACKEND_SERVER)
-
+const ref_reg_form = ref<FormInstance>()
 let submitting = ref(false);
+
 const form = reactive({
   email: '',
   first_name: '',
@@ -143,25 +146,35 @@ const form = reactive({
   password_confirmation: '',
 })
 
-const rules = []
+const rules = reactive({
+  first_name: [required('first name'), length('first name', 3, 150)],
+  last_name: [required('last name'), length('first name', 3, 150)],
+  email: [email('email')],
+  password: [required('password'), length('first name', 3, 30)],
+  password_confirmation: [required('password_confirmation'), length('first name', 3, 30)],
+})
 
-async function submitForm() {
-  submitting.value = true;
 
-  xhrPost(useApiUrl('auth/register'), form)
-    .then(() => {
-      ElMessage({
-        message: 'Your account has been created successfully',
-        type: 'success',
-        duration: 10 * 1000,
-        center: true,
-        showClose: true,
-      })
+async function submitForm(el_form: FormInstance) {
+  await el_form.validate((is_valid, fields) => {
+    if (is_valid) {
+      submitting.value = true;
 
-      useRouter().push("/login");
-    })
-    .finally(() => submitting.value = false)
+      xhrPost(useApiUrl('auth/register'), form)
+        .then(() => {
+          ElMessage({
+            message: 'Your account has been created successfully',
+            type: 'success',
+            duration: 10 * 1000,
+            center: true,
+            showClose: true,
+          })
 
+          useRouter().push("/login");
+        })
+        .finally(() => submitting.value = false)
+    }
+  })
 }
 </script>
 
