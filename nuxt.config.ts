@@ -7,7 +7,7 @@ const BACKEND_SERVER: string = process.env.BACKEND_SERVER;
 // @ts-ignore
 const BACKEND_API_VERSION: string = process.env.BACKEND_API_VERSION;
 
-console.log(BACKEND_SERVER)
+console.log(`BACKEND: ${BACKEND_SERVER}`)
 
 export default defineNuxtConfig({
 // @ts-ignore
