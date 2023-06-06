@@ -20,7 +20,7 @@
                 </el-image>
               </nuxt-link>
             </div>
-            <el-form class="mt-3" @submit.prevent="submitForm">
+            <el-form class="mt-3" :model="form" :rules="rules" ref="ref_login_form">
               <el-form-item size="large" prop="email" label-width="0">
                 <label for="email">Email</label>
                 <el-input
@@ -49,7 +49,8 @@
                   native-type="submit"
                   type="primary"
                   class="w-100"
-                  :loading="submitting">
+                  :loading="submitting"
+                  @click.prevent="submitForm(ref_login_form)">
                   Login
                 </el-button>
               </el-form-item>
@@ -78,6 +79,8 @@
 import {reactive, ref} from 'vue'
 import {Key, Message} from '@element-plus/icons-vue'
 import {axiosHandleError} from "~/helpers/xhr";
+import {FormInstance} from "element-plus";
+import {email, length, required} from "~/helpers/from_validation";
 
 setPageLayout('plain');
 
@@ -87,33 +90,41 @@ definePageMeta({
 
 const nuxt = useNuxtApp();
 const submitting = ref(false);
+const ref_login_form = ref<FormInstance>()
+
 const form = reactive({
   email: '',
   password: '',
 })
 
-const rules = []
+const rules = reactive({
+  email: [email('email')],
+  password: [required('password'), length('first name', 3, 30)],
+})
 
-async function submitForm() {
-  submitting.value = true;
+async function submitForm(el_form: FormInstance) {
+  await el_form.validate((is_valid, fields) => {
+    if (is_valid) {
+      submitting.value = true;
 
-  nuxt.$auth.loginWith('laravelJWT', {body: form})
-    .then(resp => {
-      ElMessage({
-        message: 'Logged in successfully',
-        type: 'success',
-        duration: 5 * 1000,
-        center: true,
-        showClose: true,
-      })
+      nuxt.$auth.loginWith('laravelJWT', {body: form})
+        .then(resp => {
+          ElMessage({
+            message: 'Logged in successfully',
+            type: 'success',
+            duration: 5 * 1000,
+            center: true,
+            showClose: true,
+          })
 
-      setTimeout(() => {
-        window.location.href = localStorage.getItem('auth.redirect') ?? '/'
-      }, 1000);
-    })
-    .catch(axiosHandleError)
-    .finally(() => submitting.value = false)
-
+          setTimeout(() => {
+            window.location.href = localStorage.getItem('auth.redirect') ?? '/'
+          }, 1000);
+        })
+        .catch(axiosHandleError)
+        .finally(() => submitting.value = false)
+    }
+  });
 }
 
 </script>
